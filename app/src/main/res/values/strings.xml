@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">DicodingStory</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="message_welcome">Message welcome</string>
+    <string name="title_welcome_page">Title welcome page</string>
+    <string name="message_welcome_page">Message welcome page</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="error_pass">Minimum 6 Characters Password</string>
+    <string name="logout">Logout</string>
+    <string name="name">Name</string>
+</resources>
