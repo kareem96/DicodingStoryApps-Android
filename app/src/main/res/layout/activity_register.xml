@@ -16,7 +16,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:text="Register"
-        android:textColor="@color/sky_blue_700"
+        android:textColor="@color/teal_200"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +33,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:text="@string/name"
-        android:textColor="@color/sky_blue_700"
+        android:textColor="@color/teal_200"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
@@ -62,7 +62,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:text="@string/email"
-        android:textColor="@color/sky_blue_700"
+        android:textColor="@color/teal_200"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_et_name" />
 
@@ -91,7 +91,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:text="@string/password"
-        android:textColor="@color/sky_blue_700"
+        android:textColor="@color/teal_200"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_et_email" />
 
@@ -123,7 +123,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:backgroundTint="@color/sky_blue_700"
+        android:backgroundTint="@color/teal_200"
         android:textColor="@color/black_500"
         android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"
