@@ -14,9 +14,12 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ): ViewModel(){
-    suspend fun login(email:String, password:String,): Flow<Result<LoginResponse>> = authRepository.userLogin(email, password)
 
-    fun saveToken(token:String){
+    suspend fun userLogin(email: String, password: String): Flow<Result<LoginResponse>> =
+        authRepository.userLogin(email, password)
+
+
+    fun saveAuthToken(token: String) {
         viewModelScope.launch {
             authRepository.saveAuthToken(token)
         }

@@ -82,7 +82,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_password" />
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/btn_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
             android:layout_marginStart="8dp"
             android:text="@string/register"
             android:textColor="@color/pink_500" />
-    </LinearLayout>
+    </LinearLayout>-->
 
     <RelativeLayout
         android:id="@+id/view_loading"

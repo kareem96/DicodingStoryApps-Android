@@ -9,7 +9,7 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
 
-    <!--<queries>
+    <queries>
         <intent>
             <action android:name="android.intent.action.VIEW" />
 
@@ -17,7 +17,7 @@
 
             <data android:scheme="https" />
         </intent>
-    </queries>-->
+    </queries>
 
     <application
         android:name=".BaseApplication"

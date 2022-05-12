@@ -1,7 +1,5 @@
 package com.kareemdev.dicodingstory.presentation.login
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -17,6 +15,7 @@ import com.kareemdev.dicodingstory.MainActivity.Companion.EXTRA_TOKEN
 import com.kareemdev.dicodingstory.R
 import com.kareemdev.dicodingstory.databinding.FragmentLoginBinding
 import com.kareemdev.dicodingstory.utils.animateVisibility
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -27,6 +26,8 @@ import kotlinx.coroutines.launch
  * Use the [LoginFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
@@ -43,7 +44,6 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setActions()
-        /*playAnimation()*/
     }
 
     override fun onDestroyView() {
@@ -53,27 +53,28 @@ class LoginFragment : Fragment() {
 
     private fun setActions() {
         binding.apply {
-            btnRegister.setOnClickListener {  }
-            btnLogin.setOnClickListener { goLogin() }
+            /*btnRegister.setOnClickListener {  }*/
+            btnLogin.setOnClickListener { handleLogin() }
         }
     }
 
-    private fun goLogin() {
+    private fun handleLogin() {
         val email = binding.etEmail.text.toString().trim()
-        val password = binding.etPassword.text.toString().trim()
+        val password = binding.etPassword.text.toString()
         setLoading(true)
+
         lifecycleScope.launchWhenResumed {
             // Make sure only one job that handle the login process
             if (loginJob.isActive) loginJob.cancel()
 
             loginJob = launch {
-                viewModel.login(email, password).collect { result ->
+                viewModel.userLogin(email, password).collect { result ->
                     result.onSuccess { credentials ->
 
                         // Save token to the preferences
                         // And direct user to the MainActivity
                         credentials.loginResult?.token?.let { token ->
-                            viewModel.saveToken(token)
+                            viewModel.saveAuthToken(token)
                             Intent(requireContext(), MainActivity::class.java).also { intent ->
                                 intent.putExtra(EXTRA_TOKEN, token)
                                 startActivity(intent)
@@ -100,6 +101,7 @@ class LoginFragment : Fragment() {
                 }
             }
         }
+
     }
 
     private fun setLoading(b: Boolean) {
@@ -116,40 +118,5 @@ class LoginFragment : Fragment() {
             }
         }
     }
-
-    /*private fun playAnimation() {
-        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
-            duration = 6000
-            repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-        }.start()
-
-        val title = ObjectAnimator.ofFloat(binding.etEmail, View.ALPHA, 1f).setDuration(500)
-        val message = ObjectAnimator.ofFloat(binding.etEmail, View.ALPHA, 1f).setDuration(500)
-        val emailTextView =
-            ObjectAnimator.ofFloat(binding.etEmail, View.ALPHA, 1f).setDuration(500)
-        val emailEditTextLayout =
-            ObjectAnimator.ofFloat(binding.etEmail, View.ALPHA, 1f).setDuration(500)
-        val passwordTextView =
-            ObjectAnimator.ofFloat(binding.etPassword, View.ALPHA, 1f).setDuration(500)
-        val passwordEditTextLayout =
-            ObjectAnimator.ofFloat(binding.etPassword, View.ALPHA, 1f)
-                .setDuration(500)
-        val login = ObjectAnimator.ofFloat(binding.btnLogin, View.ALPHA, 1f).setDuration(500)
-
-        AnimatorSet().apply {
-            playSequentially(
-                title,
-                message,
-                emailTextView,
-                emailEditTextLayout,
-                passwordTextView,
-                passwordEditTextLayout,
-                login
-            )
-            startDelay = 500
-        }.start()
-    }*/
-
 
 }
