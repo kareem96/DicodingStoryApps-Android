@@ -1,5 +1,6 @@
 package com.kareemdev.dicodingstory.presentation.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,11 +13,11 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kareemdev.dicodingstory.MainActivity
-import com.kareemdev.dicodingstory.R
 import com.kareemdev.dicodingstory.data.local.entity.Story
 import com.kareemdev.dicodingstory.databinding.FragmentHomeBinding
 import com.kareemdev.dicodingstory.presentation.adapter.LoadingAdapter
 import com.kareemdev.dicodingstory.presentation.adapter.StoryListAdapter
+import com.kareemdev.dicodingstory.presentation.add.AddStoryActivity
 import com.kareemdev.dicodingstory.utils.animateVisibility
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.NullPointerException
@@ -38,9 +39,10 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var listAdapter: StoryListAdapter
     private val  viewModel: HomeViewModel by viewModels()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentHomeBinding.inflate(LayoutInflater.from(requireContext()))
+        _binding = FragmentHomeBinding.inflate(LayoutInflater.from(requireActivity()))
         return binding?.root
     }
 
@@ -50,6 +52,19 @@ class HomeFragment : Fragment() {
 
         getStories()
         setRecyclerView()
+        swipeRefreshLayout()
+
+        binding?.fabCreateStory?.setOnClickListener {
+            Intent(requireContext(), AddStoryActivity::class.java).also { intent ->
+                startActivity(intent)
+            }
+        }
+    }
+
+    private fun swipeRefreshLayout() {
+        binding?.swipeRefresh?.setOnRefreshListener {
+            getStories()
+        }
     }
 
     private fun setRecyclerView() {
@@ -70,6 +85,7 @@ class HomeFragment : Fragment() {
                 }
             }
             binding?.swipeRefresh?.isRefreshing = loadState.source.refresh is LoadState.Loading
+
         }
         try {
             recyclerView = binding?.rvStories!!

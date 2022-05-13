@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
 import com.kareemdev.dicodingstory.MainActivity
 import com.kareemdev.dicodingstory.MainActivity.Companion.EXTRA_TOKEN
@@ -53,7 +54,9 @@ class LoginFragment : Fragment() {
 
     private fun setActions() {
         binding.apply {
-            /*btnRegister.setOnClickListener {  }*/
+            btnRegister.setOnClickListener(
+                Navigation.createNavigateOnClickListener(R.id.action_loginFragment_to_registerFragment)
+            )
             btnLogin.setOnClickListener { handleLogin() }
         }
     }
@@ -70,9 +73,6 @@ class LoginFragment : Fragment() {
             loginJob = launch {
                 viewModel.userLogin(email, password).collect { result ->
                     result.onSuccess { credentials ->
-
-                        // Save token to the preferences
-                        // And direct user to the MainActivity
                         credentials.loginResult?.token?.let { token ->
                             viewModel.saveAuthToken(token)
                             Intent(requireContext(), MainActivity::class.java).also { intent ->

@@ -18,36 +18,14 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:layout_marginStart="32dp"
         android:layout_marginTop="40sp"
         android:contentDescription="@string/person_with_paper_illustration"
-        android:src="@drawable/illustration_login"
+        android:src="@drawable/image_login"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView2"
-        style="@style/Text.Title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/login_title"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <TextView
-        android:id="@+id/textView3"
-        style="@style/Text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/login_message"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <com.kareemdev.dicodingstory.utils.EmailEditText
         android:id="@+id/et_email"
@@ -58,7 +36,7 @@
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <com.kareemdev.dicodingstory.utils.EditTextPassword
         android:id="@+id/et_password"
@@ -82,7 +60,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_password" />
 
-    <!--<LinearLayout
+    <LinearLayout
         android:id="@+id/btn_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -104,7 +82,7 @@
             android:layout_marginStart="8dp"
             android:text="@string/register"
             android:textColor="@color/pink_500" />
-    </LinearLayout>-->
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/view_loading"

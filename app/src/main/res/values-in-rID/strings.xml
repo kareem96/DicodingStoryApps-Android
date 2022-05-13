@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="new_to_story">Pengguna baru Story?</string>
+    <string name="new_to_story">Belum punya akun?</string>
     <string name="register">Daftar</string>
     <string name="already_have_an_account">Sudah memiliki akun?</string>
     <string name="login">Masuk</string>

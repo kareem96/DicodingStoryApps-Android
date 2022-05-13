@@ -28,9 +28,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DicodingStory">
         <activity
+            android:name=".presentation.add.AddStoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.detail.DetailActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
             android:name=".presentation.AuthActivity"
             android:exported="false" />
-
         <activity
             android:name=".MainActivity"
             android:exported="false" />
@@ -54,6 +65,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
+
 </manifest>

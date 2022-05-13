@@ -19,7 +19,7 @@
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_bg</item>
+        <item name="android:windowBackground">@drawable/learnandroi</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/dark_blue_700</item>
     </style>
 
