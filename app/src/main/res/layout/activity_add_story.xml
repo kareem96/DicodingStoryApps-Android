@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.add.AddStoryActivity">
+    tools:context=".presentation.add.AddStoryActivity"
+    tools:keep="@layout/activity_add_story">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

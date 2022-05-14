@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_home) as NavHostFragment
         navController = navHostFragment.navController
         NavigationUI.setupWithNavController(binding.navView, navHostFragment.navController)
-        navController.addOnDestinationChangedListener{controller, destination, arguments ->
+        navController.addOnDestinationChangedListener{_, destination, _ ->
             when(destination.id){
                 R.id.navigation_home -> showBottomNavigation()
                 R.id.navigation_setting -> showBottomNavigation()

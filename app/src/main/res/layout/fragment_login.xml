@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.login.LoginFragment">
+    tools:context=".presentation.login.LoginFragment"
+    tools:keep="@layout/fragment_login">
 
     <View
         android:id="@+id/view"
@@ -25,7 +26,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guidelineHorizontal2"
-        app:srcCompat="@drawable/image_signup" />
+        app:srcCompat="@drawable/image_signup"
+        android:contentDescription="@string/content_description" />
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -102,14 +104,14 @@
         app:layout_constraintTop_toBottomOf="@+id/loginButton">
 
         <TextView
-            android:textColor="@color/teal_200"
+            android:textColor="@color/dark_blue_500"
             android:layout_marginHorizontal="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/register_title" />
 
         <TextView
-            android:textColor="@color/design_default_color_error"
+            android:textColor="@color/pink_500"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/register" />

@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:clipToPadding="false"
     android:paddingHorizontal="16dp"
-    android:paddingVertical="8dp">
+    android:paddingVertical="8dp"
+    tools:keep="@layout/item_content">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
