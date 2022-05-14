@@ -53,7 +53,7 @@ class AddStoryActivity : AppCompatActivity() {
 
         lifecycleScope.launchWhenCreated {
             launch {
-                viewModel.getAuthToken().collect() { auth ->
+                viewModel.getAuthToken().collect { auth ->
                     if (!auth.isNullOrEmpty()) token = auth
                 }
             }

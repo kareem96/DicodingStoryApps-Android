@@ -44,7 +44,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="@string/dummy_name" />
+                tools:text="dummy text" />
 
             <TextView
                 android:id="@+id/tv_story_date"

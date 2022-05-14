@@ -49,12 +49,12 @@ class RegisterFragment : Fragment() {
                 Navigation.createNavigateOnClickListener(R.id.action_registerFragment_to_loginFragment)
             )
             btnRegister.setOnClickListener {
-                goResgister()
+                goRegister()
             }
         }
     }
 
-    private fun goResgister() {
+    private fun goRegister() {
         val name = binding.nameEditText.text.toString().trim()
         val email = binding.emailEditText.text.toString().trim()
         val password = binding.passwordEditText.text.toString().trim()
