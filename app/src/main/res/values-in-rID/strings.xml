@@ -6,7 +6,7 @@
     <string name="login">Masuk</string>
     <string name="press_again_to_exit">Tekan kembali untuk keluar</string>
     <string name="person_with_paper_illustration">Seseorang dengan kertas</string>
-    <string name="login_title">Halo, mari masuk</string>
+    <string name="login_title">Klik sini, Masuk</string>
     <string name="login_message">Dapatkan seluruh cerita pengalaman siswa selama belajar di Dicoding, dan kamu juga dapat membagikan ceritamu ✍️</string>
     <string name="email">Email</string>
     <string name="password">Kata sandi</string>
@@ -53,4 +53,8 @@
     <string name="cancel">Batal</string>
     <string name="logout_message_success">Berhasil logout</string>
     <string name="please_activate_location_message">Tolong aktifkan layanan lokasi</string>
+    <string name="dicoding_story">Dicoding Story</string>
+    <string name="content_description">TODO</string>
+    <string name="user">User</string>
+    <string name="datetime">Datetime</string>
 </resources>

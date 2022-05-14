@@ -27,11 +27,11 @@ class LoadingAdapter (private val retry:() -> Unit): LoadStateAdapter<LoadingAda
         }
     }
 
-    override fun onBindViewHolder(holder: LoadingAdapter.LoadStateViewHolder, loadState: LoadState) {
+    override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) {
         holder.bind(loadState)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadingAdapter.LoadStateViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): LoadStateViewHolder {
         val binding = LayoutStoryLoadingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return LoadStateViewHolder(binding, retry)
     }

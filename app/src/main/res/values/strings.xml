@@ -6,7 +6,7 @@
     <string name="login">Login</string>
     <string name="press_again_to_exit">Press again to exit</string>
     <string name="person_with_paper_illustration">Person with paper illustration</string>
-    <string name="login_title">Hello, let\'s sign in</string>
+    <string name="login_title">Click here to</string>
     <string name="login_message">Explore all of student\'s experience and story when learning in Dicoding, and of course you can also share your story too✍️</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -57,4 +57,8 @@
     <string name="cancel">Cancel</string>
     <string name="logout_message_success">Logged out successfully</string>
     <string name="please_activate_location_message">Please activate your location services</string>
+    <string name="dicoding_story">Dicoding Story</string>
+    <string name="content_description">TODO</string>
+    <string name="user">User</string>
+    <string name="datetime">Datetime</string>
 </resources>

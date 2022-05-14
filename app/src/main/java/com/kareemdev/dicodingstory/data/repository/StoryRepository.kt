@@ -7,15 +7,12 @@ import androidx.paging.PagingData
 import com.kareemdev.dicodingstory.data.local.entity.Story
 import com.kareemdev.dicodingstory.data.local.room.StoryDatabase
 import com.kareemdev.dicodingstory.data.remote.RemoteDataStory
-import com.kareemdev.dicodingstory.data.remote.response.StoryResponse
 import com.kareemdev.dicodingstory.data.remote.response.UploadResponse
 import com.kareemdev.dicodingstory.data.remote.retrofit.ApiService
-import com.kareemdev.dicodingstory.utils.wrapEspressoIdlingResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.FileDescriptor
 import javax.inject.Inject
 
 
@@ -42,17 +39,6 @@ class StoryRepository @Inject constructor(
         ).flow
     }
 
-    fun getStoriesLocation(token:String): Flow<Result<StoryResponse>> = flow {
-        wrapEspressoIdlingResource {
-            try {
-                val tokenBearer = generateBearerToken(token)
-                val response = apiService.getAllStories(tokenBearer, size = 30, location = 1)
-                emit(Result.success(response))
-            }catch (e:Exception){
-                e.printStackTrace()
-            }
-        }
-    }
 
     suspend fun uploadStory(
         token: String,

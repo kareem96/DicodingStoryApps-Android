@@ -2,25 +2,31 @@ package com.kareemdev.dicodingstory
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import dagger.hilt.android.AndroidEntryPoint
+import android.os.Bundle
+import android.os.Handler
 import androidx.activity.viewModels
-import com.kareemdev.dicodingstory.MainActivity.Companion.EXTRA_TOKEN
+import androidx.lifecycle.lifecycleScope
+import com.kareemdev.dicodingstory.databinding.ActivitySplashBinding
 import com.kareemdev.dicodingstory.presentation.AuthActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
 
 @AndroidEntryPoint
 @SuppressLint("CustomSplashScreen")
-class SplashActivity : AppCompatActivity(){
+class SplashActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySplashBinding
     private val viewModel: SplashViewModel by viewModels()
+    private val timeSplash: Long = 1000
 
-    override fun onCreate(savedInstanceState: Bundle?, ) {
-        super.onCreate(savedInstanceState,)
-        determineUserDirection()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivitySplashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        Handler().postDelayed({
+            determineUserDirection()
+            finish()
+        }, timeSplash)
     }
 
     private fun determineUserDirection() {
@@ -36,7 +42,7 @@ class SplashActivity : AppCompatActivity(){
                     } else {
                         // Token detected on data source, go to MainActivity
                         Intent(this@SplashActivity, MainActivity::class.java).also { intent ->
-                            intent.putExtra(EXTRA_TOKEN, token)
+                            intent.putExtra(MainActivity.EXTRA_TOKEN, token)
                             startActivity(intent)
                             finish()
                         }

@@ -14,13 +14,6 @@ class AuthRepository @Inject constructor(
     private val apiService: ApiService,
     private val authDataStore: AuthDataStore
 ) {
-    /**
-     * Handle login operation for the users by calling the related API
-     *
-     * @param email User's email
-     * @param password User's password
-     * @return Flow
-     */
     suspend fun userLogin(email: String, password: String): Flow<Result<LoginResponse>> = flow {
         try {
             val response = apiService.userLogin(email, password)
@@ -31,14 +24,6 @@ class AuthRepository @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
-    /**
-     * Handle registration process for the users by calling the related API
-     *
-     * @param name User's full name
-     * @param email User's email
-     * @param password User's password
-     * @return Flow
-     */
     suspend fun userRegister(
         name: String,
         email: String,
@@ -53,19 +38,9 @@ class AuthRepository @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
-    /**
-     * Save user's authentication token to the preferences
-     *
-     * @param token User's authentication token
-     */
     suspend fun saveAuthToken(token: String) {
         authDataStore.saveAuthToken(token)
     }
 
-    /**
-     * Get the user's authentication token from preferences
-     *
-     * @return Flow
-     */
     fun getAuthToken(): Flow<String?> = authDataStore.getAuthToken()
 }

@@ -8,7 +8,6 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.kareemdev.dicodingstory.data.local.entity.Story
-import com.kareemdev.dicodingstory.data.repository.AuthRepository
 import com.kareemdev.dicodingstory.data.repository.StoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

@@ -13,7 +13,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 
-private val Context.dataStore: DataStore<androidx.datastore.preferences.core.Preferences> by preferencesDataStore(name = "application")
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "application")
 
 
 @Module

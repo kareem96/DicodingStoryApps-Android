@@ -25,18 +25,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
+                android:text="@string/user"
                 android:textSize="18sp"
-                android:text="User"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/iv_story_image"
                 android:layout_width="match_parent"
                 android:layout_height="280dp"
                 android:layout_marginTop="8dp"
+                android:contentDescription="@string/content_description"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +62,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:alpha="0.6"
-                android:text="Datetime"
+                android:text="@string/datetime"
                 android:textAllCaps="true"
                 android:textSize="12sp"
                 android:textStyle="bold"

@@ -20,14 +20,7 @@ import com.kareemdev.dicodingstory.presentation.adapter.StoryListAdapter
 import com.kareemdev.dicodingstory.presentation.add.AddStoryActivity
 import com.kareemdev.dicodingstory.utils.animateVisibility
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.NullPointerException
 
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 
 @AndroidEntryPoint
 @ExperimentalPagingApi
@@ -35,12 +28,16 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding
-    private var token:String =""
+    private var token: String = ""
     private lateinit var recyclerView: RecyclerView
     private lateinit var listAdapter: StoryListAdapter
-    private val  viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentHomeBinding.inflate(LayoutInflater.from(requireActivity()))
         return binding?.root
@@ -71,13 +68,13 @@ class HomeFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(requireContext())
         listAdapter = StoryListAdapter()
         listAdapter.addLoadStateListener { loadState ->
-            if((loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && listAdapter.itemCount < 1) || loadState.source.refresh is LoadState.Error){
+            if ((loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && listAdapter.itemCount < 1) || loadState.source.refresh is LoadState.Error) {
                 binding?.apply {
                     tvNotFoundError.animateVisibility(true)
                     ivNotFoundError.animateVisibility(true)
                     rvStories.animateVisibility(false)
                 }
-            }else{
+            } else {
                 binding?.apply {
                     tvNotFoundError.animateVisibility(false)
                     ivNotFoundError.animateVisibility(false)
@@ -91,19 +88,19 @@ class HomeFragment : Fragment() {
             recyclerView = binding?.rvStories!!
             recyclerView.apply {
                 adapter = listAdapter.withLoadStateFooter(
-                    footer = LoadingAdapter{
+                    footer = LoadingAdapter {
                         listAdapter.retry()
                     }
                 )
                 layoutManager = linearLayoutManager
             }
-        }catch (e:NullPointerException){
+        } catch (e: NullPointerException) {
             e.printStackTrace()
         }
     }
 
     private fun getStories() {
-        viewModel.getStories(token).observe(viewLifecycleOwner){result ->
+        viewModel.getStories(token).observe(viewLifecycleOwner) { result ->
             updateRecyclerView(result)
         }
     }

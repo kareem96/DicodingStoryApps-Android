@@ -52,7 +52,6 @@
         android:clickable="true"
         android:drawablePadding="16dp"
         android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:padding="16dp"
         android:text="@string/logout"

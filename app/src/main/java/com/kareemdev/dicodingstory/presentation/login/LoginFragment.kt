@@ -1,5 +1,7 @@
 package com.kareemdev.dicodingstory.presentation.login
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -20,13 +22,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, ch
-
-/**
- * A simple [Fragment] subclass.
- * Use the [LoginFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -35,16 +30,21 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
     private var loginJob: Job = Job()
     private val viewModel: LoginViewModel by viewModels()
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
-        return  binding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setActions()
+        playAnimation()
     }
 
     override fun onDestroyView() {
@@ -54,16 +54,16 @@ class LoginFragment : Fragment() {
 
     private fun setActions() {
         binding.apply {
-            btnRegister.setOnClickListener(
+            toRegister.setOnClickListener(
                 Navigation.createNavigateOnClickListener(R.id.action_loginFragment_to_registerFragment)
             )
-            btnLogin.setOnClickListener { handleLogin() }
+            loginButton.setOnClickListener { handleLogin() }
         }
     }
 
     private fun handleLogin() {
-        val email = binding.etEmail.text.toString().trim()
-        val password = binding.etPassword.text.toString()
+        val email = binding.emailEditText.text.toString().trim()
+        val password = binding.passwordEditText.text.toString()
         setLoading(true)
 
         lifecycleScope.launchWhenResumed {
@@ -106,17 +106,47 @@ class LoginFragment : Fragment() {
 
     private fun setLoading(b: Boolean) {
         binding.apply {
-            etEmail.isEnabled = !b
-            etPassword.isEnabled = !b
-            btnLogin.isEnabled = !b
+            emailEditText.isEnabled = !b
+            passwordEditText.isEnabled = !b
+            loginButton.isEnabled = !b
 
-            if(b){
+            if (b) {
                 viewLoading.animateVisibility(true)
 
-            }else{
+            } else {
                 viewLoading.animateVisibility(false)
             }
         }
+    }
+
+    private fun playAnimation() {
+        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
+            duration = 6000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+
+        val title =
+            ObjectAnimator.ofFloat(binding.imageView, View.ALPHA, 1f).setDuration(500)
+        val message =
+            ObjectAnimator.ofFloat(binding.emailEditTextLayout, View.ALPHA, 1f).setDuration(500)
+        val emailTextView =
+            ObjectAnimator.ofFloat(binding.passwordEditTextLayout, View.ALPHA, 1f).setDuration(500)
+        val emailEditTextLayout =
+            ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(500)
+        val passwordTextView =
+            ObjectAnimator.ofFloat(binding.toRegister, View.ALPHA, 1f).setDuration(500)
+
+        AnimatorSet().apply {
+            playSequentially(
+                title,
+                message,
+                emailTextView,
+                emailEditTextLayout,
+                passwordTextView,
+            )
+            startDelay = 500
+        }.start()
     }
 
 }

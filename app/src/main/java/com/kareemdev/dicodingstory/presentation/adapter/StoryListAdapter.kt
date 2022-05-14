@@ -29,7 +29,6 @@ class StoryListAdapter: PagingDataAdapter<Story, StoryListAdapter.ViewHolder> (D
 
                 // On item clicked
                 root.setOnClickListener {
-                    // Set ActivityOptionsCompat for SharedElement
                     val optionsCompat: ActivityOptionsCompat =
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
                             root.context as Activity,
