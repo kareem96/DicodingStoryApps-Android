@@ -12,7 +12,7 @@
         <entry key="app/src/main/res/layout/activity_add_story.xml" value="0.12" />
         <entry key="app/src/main/res/layout/activity_auth.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_detail.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_home.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/activity_home.xml" value="0.18" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.19649122807017544" />
@@ -21,10 +21,10 @@
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.1926605504587156" />
         <entry key="app/src/main/res/layout/fragment_register.xml" value="0.15053763440860216" />
         <entry key="app/src/main/res/layout/fragment_setting.xml" value="0.19444444444444445" />
-        <entry key="app/src/main/res/layout/item_content.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/item_content.xml" value="0.14" />
         <entry key="app/src/main/res/layout/layout_story_loading.xml" value="0.14" />
         <entry key="app/src/main/res/menu/added_menu.xml" value="0.30364583333333334" />
-        <entry key="app/src/main/res/menu/bottom_nav.xml" value="0.2" />
+        <entry key="app/src/main/res/menu/bottom_nav.xml" value="0.16" />
         <entry key="app/src/main/res/menu/main_menu.xml" value="0.16" />
         <entry key="app/src/main/res/xml/file_paths.xml" value="0.30364583333333334" />
       </map>

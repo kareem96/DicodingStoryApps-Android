@@ -25,14 +25,12 @@ class StoryRepository @Inject constructor(
     private fun generateBearerToken(token: String): String {
         return "Bearer $token"
     }
-    fun getStories(token:String): Flow<PagingData<Story>> {
+    fun getStories(
+        token: String
+    ): Flow<PagingData<Story>> {
         return Pager(
-            config  = PagingConfig(pageSize = 5),
-            remoteMediator = RemoteDataStory(
-                storyDatabase,
-                apiService,
-                generateBearerToken(token)
-            ),
+            config = PagingConfig(pageSize = 5),
+            remoteMediator = RemoteDataStory(storyDatabase, apiService, "Bearer $token"),
             pagingSourceFactory = {
                 storyDatabase.storyDao().getAllStories()
             }
@@ -44,8 +42,8 @@ class StoryRepository @Inject constructor(
         token: String,
         file: MultipartBody.Part,
         description: RequestBody,
-        lat: RequestBody? = null,
-        lon: RequestBody? = null,
+        lat: RequestBody?,
+        lon: RequestBody?,
     ): Flow<Result<UploadResponse>> = flow {
         try {
             val tokenBearer = generateBearerToken(token)

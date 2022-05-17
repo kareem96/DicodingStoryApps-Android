@@ -10,6 +10,7 @@
     <string name="login_message">Dapatkan seluruh cerita pengalaman siswa selama belajar di Dicoding, dan kamu juga dapat membagikan ceritamu ✍️</string>
     <string name="email">Email</string>
     <string name="password">Kata sandi</string>
+    <string name="upload_warning">Silahkan pilih gambar terlebih dahulu</string>
     <string name="register_title">Ayo buat akun</string>
     <string name="register_message">Baru di aplikasi ini? Ayo buat akun baru untuk kamu✨</string>
     <string name="full_name">Nama lengkap</string>

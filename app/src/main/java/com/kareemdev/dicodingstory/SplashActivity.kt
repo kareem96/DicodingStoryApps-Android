@@ -6,13 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
+import androidx.paging.ExperimentalPagingApi
 import com.kareemdev.dicodingstory.databinding.ActivitySplashBinding
 import com.kareemdev.dicodingstory.presentation.AuthActivity
+import com.kareemdev.dicodingstory.presentation.home.HomeActivity
+import com.kareemdev.dicodingstory.presentation.home.HomeActivity.Companion.EXTRA_TOKEN
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
+@ExperimentalPagingApi
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
@@ -24,31 +28,23 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Handler().postDelayed({
-            determineUserDirection()
-            finish()
-        }, timeSplash)
-    }
-
-    private fun determineUserDirection() {
-        lifecycleScope.launchWhenCreated {
-            launch {
+            viewModel.viewModelScope.launch {
                 viewModel.getAuthToken().collect { token ->
                     if (token.isNullOrEmpty()) {
-                        // No token in data source, go to AuthActivity
                         Intent(this@SplashActivity, AuthActivity::class.java).also { intent ->
                             startActivity(intent)
                             finish()
                         }
                     } else {
-                        // Token detected on data source, go to MainActivity
-                        Intent(this@SplashActivity, MainActivity::class.java).also { intent ->
-                            intent.putExtra(MainActivity.EXTRA_TOKEN, token)
+                        Intent(this@SplashActivity, HomeActivity::class.java).also { intent ->
+                            intent.putExtra(EXTRA_TOKEN, token)
                             startActivity(intent)
                             finish()
                         }
                     }
                 }
             }
-        }
+            finish()
+        }, timeSplash)
     }
 }

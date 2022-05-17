@@ -3,6 +3,7 @@ package com.kareemdev.dicodingstory.presentation.add
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.location.Location
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,11 +13,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils
-import com.google.android.material.snackbar.Snackbar
+import com.kareemdev.dicodingstory.R
 import com.kareemdev.dicodingstory.databinding.ActivityAddStoryBinding
+import com.kareemdev.dicodingstory.presentation.home.HomeActivity
+import com.kareemdev.dicodingstory.presentation.home.HomeActivity.Companion.EXTRA_TOKEN
 import com.kareemdev.dicodingstory.utils.MediaUtils
 import com.kareemdev.dicodingstory.utils.animateVisibility
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,6 +41,9 @@ class AddStoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddStoryBinding
     private lateinit var currentPhotoPath: String
     private var getFile: File? = null
+    private var location: Location? = null
+    private var lat: RequestBody? = null
+    private var lon: RequestBody? = null
     private var token: String = ""
     private val viewModel: AddStoryViewModel by viewModels()
 
@@ -51,11 +57,9 @@ class AddStoryActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
-        lifecycleScope.launchWhenCreated {
-            launch {
-                viewModel.getAuthToken().collect { auth ->
-                    if (!auth.isNullOrEmpty()) token = auth
-                }
+        viewModel.viewModelScope.launch {
+            viewModel.getAuthToken().collect {
+                token = it!!
             }
         }
         binding.btnCamera.setOnClickListener {
@@ -65,7 +69,7 @@ class AddStoryActivity : AppCompatActivity() {
             openGallery()
         }
         binding.btnPost.setOnClickListener {
-            uploadStory()
+            startUpload()
         }
     }
 
@@ -103,8 +107,7 @@ class AddStoryActivity : AppCompatActivity() {
         }
     }
 
-    private val launcherCamera =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val launcherCamera = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 val file = File(currentPhotoPath).also { getFile = it }
                 val os: OutputStream
@@ -154,60 +157,64 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
 
-    private fun uploadStory() {
-        stateLoading(true)
-        val edtDescription = binding.etDescription
-        var isValid = true
-        if (edtDescription.text.toString().isBlank()) {
-            edtDescription.error = "Please this fill not be empty"
-            isValid = false
-        }
-        if (getFile == null) {
-            showSnackBar("Please select image")
-            isValid = false
-        }
-        if (isValid) {
-            lifecycleScope.launchWhenCreated {
-                launch {
-                    val description =
-                        edtDescription.text.toString().toRequestBody("text/plain".toMediaType())
-                    val file = MediaUtils.reduceFileImage(getFile as File)
-                    val requesImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                    val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
-                        "photo",
-                        file.name,
-                        requesImageFile
-                    )
-                    val lat: RequestBody? = null
-                    val lon: RequestBody? = null
+    private fun startUpload() {
+        if (getFile != null) {
+            stateLoading(true)
+            val desc = binding.etDescription
+            val file = MediaUtils.reduceFileImage(getFile as File)
+            val description =
+                binding.etDescription.text.toString().toRequestBody("text/plain".toMediaType())
+            val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+                "photo", file.name, requestImageFile
+            )
 
-                    viewModel.uploadImage(token, imageMultipart, description, lat, lon)
-                        .collect { response ->
-                            response.onSuccess {
+            if (location != null) {
+                lat = location?.latitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+                lon = location?.longitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+            }
+
+            viewModel.viewModelScope.launch {
+                viewModel.uploadImage(token, imageMultipart, description, lat, lon)
+                    .collect { response ->
+                        response.onSuccess {
+                            Intent(this@AddStoryActivity, HomeActivity::class.java).also {
+                                it.apply {
+                                    putExtra(EXTRA_TOKEN, token)
+                                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                }
+                                startActivity(it)
+                                finish()
+                            }
+                        }
+                        response.onFailure {
+                            if (desc.text.toString().isEmpty()) {
                                 Toast.makeText(
                                     this@AddStoryActivity,
                                     "Success upload",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                finish()
-                            }
-                            response.onFailure {
                                 stateLoading(false)
-                                showSnackBar("Upload failed")
+                            } else {
+                                Toast.makeText(
+                                    this@AddStoryActivity,
+                                    "Failed upload",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                stateLoading(false)
                             }
                         }
-                }
+                    }
             }
 
-        } else stateLoading(false)
-    }
-
-    private fun showSnackBar(s: String) {
-        Snackbar.make(
-            binding.root,
-            s,
-            Snackbar.LENGTH_SHORT
-        ).show()
+        } else {
+            stateLoading(false)
+            Toast.makeText(
+                this,
+                getString(R.string.upload_warning),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun stateLoading(b: Boolean) {

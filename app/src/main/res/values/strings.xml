@@ -9,6 +9,7 @@
     <string name="login_title">Click here to</string>
     <string name="login_message">Explore all of student\'s experience and story when learning in Dicoding, and of course you can also share your story too✍️</string>
     <string name="email">Email</string>
+    <string name="upload_warning">Please choose image first</string>
     <string name="password">Password</string>
     <string name="register_title">Let\'s create an account</string>
     <string name="register_message">New to this application? \nLet\'s create an account for you ✨</string>

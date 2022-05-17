@@ -12,17 +12,18 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.paging.ExperimentalPagingApi
 import com.google.android.material.snackbar.Snackbar
-import com.kareemdev.dicodingstory.MainActivity
-import com.kareemdev.dicodingstory.MainActivity.Companion.EXTRA_TOKEN
 import com.kareemdev.dicodingstory.R
 import com.kareemdev.dicodingstory.databinding.FragmentLoginBinding
+import com.kareemdev.dicodingstory.presentation.home.HomeActivity
+import com.kareemdev.dicodingstory.presentation.home.HomeActivity.Companion.EXTRA_TOKEN
 import com.kareemdev.dicodingstory.utils.animateVisibility
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-
+@ExperimentalPagingApi
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
@@ -75,7 +76,7 @@ class LoginFragment : Fragment() {
                     result.onSuccess { credentials ->
                         credentials.loginResult?.token?.let { token ->
                             viewModel.saveAuthToken(token)
-                            Intent(requireContext(), MainActivity::class.java).also { intent ->
+                            Intent(requireContext(), HomeActivity::class.java).also { intent ->
                                 intent.putExtra(EXTRA_TOKEN, token)
                                 startActivity(intent)
                                 requireActivity().finish()

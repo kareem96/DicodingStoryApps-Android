@@ -1,9 +1,9 @@
 package com.kareemdev.dicodingstory.data.local.entity
 
 import android.os.Parcelable
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 
@@ -11,19 +11,24 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "story")
 data class Story(
     @PrimaryKey
+    @field:SerializedName("id")
     val id: String,
 
+    @field:SerializedName("name")
     val name: String,
 
+    @field:SerializedName("description")
     val description: String,
 
-    @ColumnInfo(name = "created_at")
-    val createdAt: String,
-
-    @ColumnInfo(name = "photo_url")
+    @field:SerializedName("photoUrl")
     val photoUrl: String,
 
-    val lon: Double?,
+    @field:SerializedName("createdAt")
+    val createdAt: String,
 
-    val lat: Double?
+    @field:SerializedName("lat")
+    val lat: Double?,
+
+    @field:SerializedName("lon")
+    val lon: Double?
 ) : Parcelable

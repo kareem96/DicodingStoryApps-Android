@@ -1,5 +1,6 @@
 package com.kareemdev.dicodingstory.presentation.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -17,6 +18,7 @@ class LoadingAdapter (private val retry:() -> Unit): LoadStateAdapter<LoadingAda
             binding.retryButton.setOnClickListener { retry.invoke() }
         }
 
+        @SuppressLint("SetTextI18n")
         fun bind(loadState: LoadState){
             if(loadState is LoadState.Error){
                 binding.errorMsg.text = "Unable to fetch stories data"
