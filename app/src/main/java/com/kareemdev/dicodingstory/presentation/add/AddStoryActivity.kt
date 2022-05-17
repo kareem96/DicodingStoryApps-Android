@@ -13,9 +13,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils
+import com.google.android.material.snackbar.Snackbar
 import com.kareemdev.dicodingstory.R
 import com.kareemdev.dicodingstory.databinding.ActivityAddStoryBinding
 import com.kareemdev.dicodingstory.presentation.home.HomeActivity
@@ -69,7 +71,7 @@ class AddStoryActivity : AppCompatActivity() {
             openGallery()
         }
         binding.btnPost.setOnClickListener {
-            startUpload()
+            uploadStory()
         }
     }
 
@@ -156,65 +158,86 @@ class AddStoryActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 
+    private fun uploadStory() {
+        stateLoading(true)
 
-    private fun startUpload() {
-        if (getFile != null) {
-            stateLoading(true)
-            val desc = binding.etDescription
-            val file = MediaUtils.reduceFileImage(getFile as File)
-            val description =
-                binding.etDescription.text.toString().toRequestBody("text/plain".toMediaType())
-            val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-            val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
-                "photo", file.name, requestImageFile
-            )
+        val etDescription = binding.etDescription
+        var isValid = true
 
-            if (location != null) {
-                lat = location?.latitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-                lon = location?.longitude.toString().toRequestBody("text/plain".toMediaTypeOrNull())
-            }
+        // Validation for the description edit text
+        if (etDescription.text.toString().isBlank()) {
+            etDescription.error = getString(R.string.desc_empty_field_error)
+            isValid = false
+        }
 
-            viewModel.viewModelScope.launch {
-                viewModel.uploadImage(token, imageMultipart, description, lat, lon)
-                    .collect { response ->
-                        response.onSuccess {
-                            Intent(this@AddStoryActivity, HomeActivity::class.java).also {
-                                it.apply {
-                                    putExtra(EXTRA_TOKEN, token)
-                                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        // Validation for the image
+        if (getFile == null) {
+            showSnackbar(getString(R.string.empty_image_error))
+            isValid = false
+        }
+
+        // Required content is valid and ready to upload
+        if (isValid) {
+            lifecycleScope.launchWhenStarted {
+                launch {
+                    val description =
+                        etDescription.text.toString().toRequestBody("text/plain".toMediaType())
+
+                    // Get image file and convert to MultiPart
+                    val file = MediaUtils.reduceFileImage(getFile as File)
+                    val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                    val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+                        "photo",
+                        file.name,
+                        requestImageFile
+                    )
+
+                    var lat: RequestBody? = null
+                    var lon: RequestBody? = null
+
+                    if (location != null) {
+                        lat = location?.latitude.toString().toRequestBody("text/plain".toMediaType())
+                        lon = location?.longitude.toString().toRequestBody("text/plain".toMediaType())
+                    }
+
+                    viewModel.viewModelScope.launch {
+
+                        viewModel.uploadImage(token, imageMultipart, description, lat, lon).collect { response ->
+                            response.onSuccess {
+                                Intent(this@AddStoryActivity, HomeActivity::class.java).also {
+                                    it.apply {
+                                        putExtra(EXTRA_TOKEN, token)
+                                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                    }
+                                    startActivity(it)
+                                    finish()
                                 }
-                                startActivity(it)
+                                Toast.makeText(
+                                    this@AddStoryActivity,
+                                    getString(R.string.story_upload),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 finish()
                             }
-                        }
-                        response.onFailure {
-                            if (desc.text.toString().isEmpty()) {
-                                Toast.makeText(
-                                    this@AddStoryActivity,
-                                    "Success upload",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+
+                            response.onFailure {
                                 stateLoading(false)
-                            } else {
-                                Toast.makeText(
-                                    this@AddStoryActivity,
-                                    "Failed upload",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                stateLoading(false)
+                                showSnackbar(getString(R.string.image_upload_failed))
                             }
                         }
                     }
+                }
             }
+        } else stateLoading(false)
+    }
 
-        } else {
-            stateLoading(false)
-            Toast.makeText(
-                this,
-                getString(R.string.upload_warning),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+
+    private fun showSnackbar(message: String) {
+        Snackbar.make(
+            binding.root,
+            message,
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
     private fun stateLoading(b: Boolean) {
