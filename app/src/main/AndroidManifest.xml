@@ -46,8 +46,7 @@
 
         <activity
             android:name=".presentation.maps.MapsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_maps" />
+            android:exported="false"/>
         <activity
             android:name=".presentation.home.HomeActivity"
             android:exported="false" />

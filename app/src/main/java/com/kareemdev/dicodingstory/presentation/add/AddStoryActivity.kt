@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -51,8 +52,6 @@ class AddStoryActivity : AppCompatActivity() {
     private lateinit var currentPhotoPath: String
     private var getFile: File? = null
     private var location: Location? = null
-    private var lat: RequestBody? = null
-    private var lon: RequestBody? = null
     private var token: String = ""
     private val viewModel: AddStoryViewModel by viewModels()
 
@@ -185,7 +184,6 @@ class AddStoryActivity : AppCompatActivity() {
         val etDescription = binding.etDescription
         var isValid = true
 
-        // Validation for the description edit text
         if (etDescription.text.toString().isBlank()) {
             etDescription.error = getString(R.string.desc_empty_field_error)
             isValid = false
@@ -197,7 +195,6 @@ class AddStoryActivity : AppCompatActivity() {
             isValid = false
         }
 
-        // Required content is valid and ready to upload
         if (isValid) {
             lifecycleScope.launchWhenStarted {
                 launch {
@@ -277,21 +274,23 @@ class AddStoryActivity : AppCompatActivity() {
                 getLastLocation()
             }
             else ->{
-                Snackbar.make(
-                    binding.root,
-                    getString(R.string.location_permission_denied),
-                    Snackbar.LENGTH_SHORT
-                )
-                    .setActionTextColor(getColor(R.color.white))
-                    .setAction(getString(R.string.location_permission_denied_action)) {
-                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).also { intent ->
-                            val uri = Uri.fromParts("package", packageName, null)
-                            intent.data = uri
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(intent)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.location_permission_denied),
+                        Snackbar.LENGTH_SHORT
+                    )
+                        .setActionTextColor(getColor(R.color.white))
+                        .setAction(getString(R.string.location_permission_denied_action)) {
+                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).also { intent ->
+                                val uri = Uri.fromParts("package", packageName, null)
+                                intent.data = uri
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                startActivity(intent)
+                            }
                         }
-                    }
-                    .show()
+                        .show()
+                }
                 binding.switchLocation.isChecked = false
             }
         }
@@ -304,7 +303,6 @@ class AddStoryActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            // Location permission granted
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
                     this.location = location
@@ -320,7 +318,6 @@ class AddStoryActivity : AppCompatActivity() {
                 }
             }
         } else {
-            // Location permission denied
             requestPermissionLauncher.launch(
                 arrayOf(
                     Manifest.permission.ACCESS_COARSE_LOCATION

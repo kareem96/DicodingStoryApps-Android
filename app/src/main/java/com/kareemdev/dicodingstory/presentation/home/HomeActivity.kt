@@ -103,6 +103,7 @@ class HomeActivity : AppCompatActivity() {
                 viewModel.logout()
                 Intent(this, AuthActivity::class.java).also { intent ->
                     startActivity(intent)
+                    finish()
                 }
                 Toast.makeText(this, "Success logout", Toast.LENGTH_SHORT).show()
             }

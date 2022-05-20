@@ -22,7 +22,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.kareemdev.dicodingstory.R
 import com.kareemdev.dicodingstory.databinding.ActivityMapsBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
