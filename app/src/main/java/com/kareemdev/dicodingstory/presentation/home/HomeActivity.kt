@@ -19,6 +19,7 @@ import com.kareemdev.dicodingstory.presentation.AuthActivity
 import com.kareemdev.dicodingstory.presentation.adapter.LoadingAdapter
 import com.kareemdev.dicodingstory.presentation.adapter.StoryAdapter
 import com.kareemdev.dicodingstory.presentation.add.AddStoryActivity
+import com.kareemdev.dicodingstory.presentation.maps.MapsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -79,6 +80,12 @@ class HomeActivity : AppCompatActivity() {
         return when(item.itemId){
             R.id.menu_setting -> {
                 startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+                true
+            }
+            R.id.menu_maps -> {
+                Intent(this, MapsActivity::class.java).also {
+                    startActivity(it)
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)

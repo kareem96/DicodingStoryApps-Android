@@ -1,6 +1,8 @@
 package com.kareemdev.dicodingstory.presentation.add
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
@@ -8,15 +10,20 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import com.kareemdev.dicodingstory.R
 import com.kareemdev.dicodingstory.databinding.ActivityAddStoryBinding
@@ -49,6 +56,12 @@ class AddStoryActivity : AppCompatActivity() {
     private var token: String = ""
     private val viewModel: AddStoryViewModel by viewModels()
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    companion object {
+        private const val TAG = "CreateStoryActivity"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
@@ -57,6 +70,8 @@ class AddStoryActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
 
         viewModel.viewModelScope.launch {
@@ -73,6 +88,13 @@ class AddStoryActivity : AppCompatActivity() {
         binding.btnPost.setOnClickListener {
             uploadStory()
         }
+        binding.switchLocation.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked){
+                getLastLocation()
+            }else{
+                this.location = null
+            }
+        }
     }
 
     private fun openGallery() {
@@ -83,8 +105,7 @@ class AddStoryActivity : AppCompatActivity() {
         launcherGallery.launch(chooser)
     }
 
-    private val launcherGallery =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val launcherGallery = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 val selectedImg: Uri = result.data?.data as Uri
                 MediaUtils.uriToFile(selectedImg, this).also { getFile = it }
@@ -249,4 +270,63 @@ class AddStoryActivity : AppCompatActivity() {
             viewLoading.animateVisibility(b)
         }
     }
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permission ->
+        when{
+            permission[Manifest.permission.ACCESS_COARSE_LOCATION] ?: false -> {
+                getLastLocation()
+            }
+            else ->{
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.location_permission_denied),
+                    Snackbar.LENGTH_SHORT
+                )
+                    .setActionTextColor(getColor(R.color.white))
+                    .setAction(getString(R.string.location_permission_denied_action)) {
+                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).also { intent ->
+                            val uri = Uri.fromParts("package", packageName, null)
+                            intent.data = uri
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
+                        }
+                    }
+                    .show()
+                binding.switchLocation.isChecked = false
+            }
+        }
+
+    }
+
+    private fun getLastLocation() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            // Location permission granted
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
+                    this.location = location
+                    Log.d(TAG, "getLastLocation: ${location.latitude}, ${location.longitude}")
+                } else {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.please_activate_location_message),
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    binding.switchLocation.isChecked = false
+                }
+            }
+        } else {
+            // Location permission denied
+            requestPermissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+    }
+
 }

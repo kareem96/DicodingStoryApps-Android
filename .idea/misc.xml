@@ -9,7 +9,7 @@
         <entry key="app/src/main/res/drawable/ic_person.xml" value="0.1" />
         <entry key="app/src/main/res/layout-v23/fragment_setting.xml" value="0.14322916666666666" />
         <entry key="app/src/main/res/layout/activity_add.xml" value="0.15" />
-        <entry key="app/src/main/res/layout/activity_add_story.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/activity_add_story.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_auth.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_detail.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.18" />
