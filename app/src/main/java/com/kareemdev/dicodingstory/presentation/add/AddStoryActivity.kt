@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
 import android.os.Build
@@ -94,6 +95,11 @@ class AddStoryActivity : AppCompatActivity() {
                 this.location = null
             }
         }
+    }
+
+    override fun onStart() {
+        getLastLocation()
+        super.onStart()
     }
 
     private fun openGallery() {
@@ -198,8 +204,7 @@ class AddStoryActivity : AppCompatActivity() {
         if (isValid) {
             lifecycleScope.launchWhenStarted {
                 launch {
-                    val description =
-                        etDescription.text.toString().toRequestBody("text/plain".toMediaType())
+                    val description = etDescription.text.toString().toRequestBody("text/plain".toMediaType())
 
                     // Get image file and convert to MultiPart
                     val file = MediaUtils.reduceFileImage(getFile as File)
@@ -298,15 +303,13 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun getLastLocation() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
                     this.location = location
-                    Log.d(TAG, "getLastLocation: ${location.latitude}, ${location.longitude}")
+                    getAddress(location.latitude, location.longitude)
+                    Log.d(TAG, "getLastLocation: ${getAddress(location.latitude, location.longitude)}")
+//                    Log.d(TAG, "getLastLocation: ${location.latitude}, ${location.longitude}")
                 } else {
                     Toast.makeText(
                         this,
@@ -324,6 +327,12 @@ class AddStoryActivity : AppCompatActivity() {
                 )
             )
         }
+    }
+
+    private fun getAddress(lat: Double, lng: Double): String {
+        val geocoder = Geocoder(this)
+        val list = geocoder.getFromLocation(lat, lng, 1)
+        return list[0].getAddressLine(0)
     }
 
 }
